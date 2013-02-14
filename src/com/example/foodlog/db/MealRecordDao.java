@@ -232,7 +232,6 @@ public class MealRecordDao {
 	 */
 	private MealRecord getRecord( Cursor cursor){
 		MealRecord record = new MealRecord();
-
 		record.setRowid( cursor.getLong(cursor.getColumnIndex(MealRecord.COLUMN_ID)));
 		record.setYear( cursor.getInt(cursor.getColumnIndex(MealRecord.COLUMN_YEAR)));
 		record.setMonth(cursor.getInt(cursor.getColumnIndex(MealRecord.COLUMN_MONTH)));
