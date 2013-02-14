@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="days">7</integer>
+    <integer name="hours">24</integer>
+    <integer name="minutes">60</integer>
+    <integer name="defaultMemberNum">1</integer>
+</resources>

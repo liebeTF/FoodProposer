@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:stretchColumns="1"
+	android:shrinkColumns="1">
+
+
+    <LinearLayout
+		android:layout_width="fill_parent"
+		android:orientation="horizontal"
+		android:layout_height="wrap_content">
+		<TextView
+		    android:id="@+id/dateText"
+		    android:textSize="10pt"
+		    android:gravity="center"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"/>        
+		<TextView
+		    android:id="@+id/timeText"
+		    android:textSize="10pt"
+		    android:gravity="center"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"/>
+	</LinearLayout>
+    <!--  食前満腹度-->
+	<TableRow
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+		<TextView
+		    android:id="@+id/satiety1Text"
+			android:text="@string/satiety1"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+		<TextView
+		    android:id="@+id/satiety2Text"
+			android:text="@string/satiety2"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" 
+			android:layout_marginLeft="50dip"
+			/>
+
+	</TableRow>
+    
+    <!--  何食目-->
+	<TableRow
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+		<TextView
+			android:text="@string/nthLabel"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+		<EditText
+			android:id="@+id/nthText"
+			android:hint="@string/required"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:inputType="numberDecimal"/>
+	</TableRow>
+    <!--  食事時間-->
+	<TableRow
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+		<TextView
+			android:text="@string/mealTimeLabel"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+		<EditText
+			android:id="@+id/mealTimeText"
+			android:hint="@string/required"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:inputType="numberDecimal"/>
+	</TableRow>
+
+	<!--  何人で食べたか-->
+	<TableRow
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+		<TextView
+			android:text="@string/memberLabel"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+		<EditText
+			android:id="@+id/memberText"
+			android:hint="@string/required"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@integer/defaultMemberNum"
+			android:inputType="numberDecimal"/>
+	</TableRow>
+		
+    		
+	<!--  タンパク質-->
+	<TableRow
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+		<TextView
+			android:text="@string/proteinLabel"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+		<EditText
+			android:id="@+id/proteinText"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:inputType="number"/>
+	</TableRow>
+	
+	<!-- 炭水化物 -->
+	<TableRow
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+		<TextView
+			android:text="@string/carbohydrateLabel"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+		<EditText
+			android:id="@+id/carbohydrateText"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:inputType="number"/>
+			</TableRow>
+
+	<!-- 脂質　-->
+	<TableRow
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+		<TextView
+			android:text="@string/lipidLabel"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+		<EditText
+			android:id="@+id/lipidText"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:inputType="number"/>
+			
+	</TableRow>
+
+	   <!-- 熱量 -->		
+	<TableRow
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+		<TextView
+			android:text="@string/energyLabel"
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:gravity="center"
+			/>
+
+		<LinearLayout
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:orientation="horizontal" >
+
+		<Button
+		    android:id="@+id/calCalButton"
+		    android:layout_width="wrap_content"
+		    android:layout_height="match_parent"
+		    android:text="@string/calculattion" />
+
+		<TextView
+			android:id="@+id/energyText"
+			android:layout_width="fill_parent"
+			android:layout_height="match_parent"
+			android:gravity="center"
+			android:text="@string/uncalculated"/>
+		</LinearLayout>
+		</TableRow>
+			
+
+</TableLayout>

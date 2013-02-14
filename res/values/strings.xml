@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">FoodProposer</string>
+    <string name="energyLabel">熱量(kcal)</string>
+    <string name="proteinLabel">タンパク質(g)</string>
+    <string name="carbohydrateLabel">炭水化物(g)</string>
+    <string name="lipidLabel">脂質(g)</string>
+    <string name="unit">単位</string>
+    <string name="satiety1">満腹度（食前）</string>
+    <string name="satiety2">満腹度（食後）</string>
+    <string name="calorie">kcal</string>
+    <string name="dateLabel">日付</string>
+    <string name="timeLabel">時刻</string>
+    <string name="nthLabel">何食目</string>
+    <string name="memberLabel">何人で？</string>
+    <string name="mealTimeLabel">食事時間（分）</string>
+    <string name="month">月</string>
+    <string name="year">年</string>
+    <string name="today">今日</string>
+    <string name="sum">合計:</string>
+    
+
+    <string name="data_loading">ロード中</string>
+    <string name="menu_edit">編集</string>
+    <string name="menu_new">新規</string>
+    <string name="record">記録</string>
+    <string name="list">一覧</string>
+    <string name="menu_settings">設定</string>
+    <string name="menu_save">保存</string>
+    <string name="menu_delete">削除</string>
+    <string name="menu_search">検索</string>
+    <string name="required">必須項目</string>
+
+    <string name="hungry">空腹</string>
+    <string name="full">満腹</string>
+        
+    <string name="recorded">記録済</string>
+    <string name="unrecorded">未記録</string>
+    <string name="calculattion">計算</string>
+    <string name="uncalculated">未計算</string>
+    <string name="saved">保存しました</string>
+	<string name="deleted">削除しました</string>
+	<string name="confirm_delete">削除してよろしいですか？</string>
+    <string name="error_required">必須項目を入力してください</string>
+    <string name="error_required_number">数値で入力してください</string>
+    
+
+</resources>

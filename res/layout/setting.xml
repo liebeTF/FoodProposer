@@ -1,0 +1,46 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity" >
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+	    <TextView
+ 	       android:id="@+id/listlabel"
+    	    android:layout_width="fill_parent"
+    	    android:width="0dp"
+    	    android:layout_weight="1"
+        	android:layout_height="wrap_content"
+        	android:gravity="center"
+        	android:textSize="20pt"
+        	android:layout_margin="2dip"
+        	android:text="@string/list"
+        />
+	    <TextView
+ 	       android:id="@+id/dailylabel"
+    	    android:layout_width="fill_parent"
+    	    android:width="0dp"
+    	    android:layout_weight="1"
+        	android:layout_height="wrap_content"
+        	android:gravity="center"
+        	android:textSize="20pt"
+        	android:layout_margin="2dip"
+        	android:text="@string/today"
+        />
+	    <TextView
+ 	      	android:id="@+id/recordlabel"
+    	    android:layout_width="fill_parent"
+    	    android:width="0dp"
+    	    android:layout_weight="1"
+        	android:layout_height="wrap_content"
+        	android:gravity="center"
+        	android:textSize="20pt"
+        	android:layout_margin="2dip"
+        	android:text="@string/record"
+        />
+    </TableRow>
+
+</RelativeLayout>
