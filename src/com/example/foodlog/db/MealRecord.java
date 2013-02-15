@@ -119,6 +119,7 @@ public class MealRecord implements Serializable {
 //		builder.append( getDate());
 //		builder.append(", ");
 		builder.append( getTime());
+		builder.append("," +  getNth()+"H–Ú");
 		
 		if( energy != null){
 			builder.append(", ");

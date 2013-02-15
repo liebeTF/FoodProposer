@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.example.foodlog.db.MealRecord;
 import com.example.foodlog.db.MealRecordDao;
+import com.example.foodlog.db.StatisticsRecord;
 import com.example.foodlog.R;
 
 import android.app.Activity;
@@ -31,6 +32,7 @@ import android.widget.DatePicker;
  */
 public class DailyMealListActivity extends Activity implements OnItemClickListener{
 	static MealRecordDao dao;
+	StatisticsRecord statistics = null;
 	Integer year;
 	Integer month;
 	Integer day;
@@ -132,26 +134,39 @@ public class DailyMealListActivity extends Activity implements OnItemClickListen
 
 	        @Override
 	        protected void onPostExecute(List<MealRecord> result) {
-	                // 処理中ダイアログをクローズ
-	                progressDialog.dismiss();
+			// 処理中ダイアログをクローズ
+			progressDialog.dismiss();
 
-	                // 表示データのクリア
-	                arrayAdapter.clear();
-	                Double proteinSum=0.0;
-	                Double carbohydrateSum=0.0;
-	                Double lipidSum=0.0;
+			// 表示データのクリア
+			arrayAdapter.clear();
+			// Double proteinSum=0.0;
+			// Double carbohydrateSum=0.0;
+			// Double lipidSum=0.0;
 
-	                // 表示データの設定
-	                for (MealRecord record : result) {
-	                	proteinSum += (record.getProtein()==null)? 0:record.getProtein();
-	                	carbohydrateSum += (record.getCarbohydrate()==null)? 0:record.getCarbohydrate();
-	                	lipidSum += (record.getLipid()==null) ? 0: record.getLipid();
-	                	arrayAdapter.add(record);
-	                }
-	                energyText.setText(MealRecord.calcEnergy(proteinSum, carbohydrateSum, lipidSum)+" kcal ");
-	                proteinText.setText("P " +proteinSum+" g");
-	                carbohydrateText.setText("C " +carbohydrateSum+" g");
-	                lipidText.setText("F " +lipidSum+" g");
+			// 表示データの設定
+			statistics = dao.listToStatistics(result, StatisticsRecord.MODE_SUM);
+			for (MealRecord record : result) {
+				// proteinSum += (record.getProtein()==null)?
+				// 0:record.getProtein();
+				// carbohydrateSum += (record.getCarbohydrate()==null)?
+				// 0:record.getCarbohydrate();
+				// lipidSum += (record.getLipid()==null) ? 0: record.getLipid();
+				arrayAdapter.add(record);
+			}
+			// energyText.setText(MealRecord.calcEnergy(proteinSum,
+			// carbohydrateSum, lipidSum)+" kcal ");
+			// proteinText.setText("P " +proteinSum+" g");
+			// carbohydrateText.setText("C " +carbohydrateSum+" g");
+			// lipidText.setText("F " +lipidSum+" g");
+			if (statistics != null) {
+				energyText.setText(MealRecord.calcEnergy(
+						statistics.getProtein(), statistics.getCarbohydrate(),
+						statistics.getLipid()) + " kcal ");
+				proteinText.setText("P " + statistics.getProtein() + " g");
+				carbohydrateText.setText("C " + statistics.getCarbohydrate()
+						+ " g");
+				lipidText.setText("F " + statistics.getLipid() + " g");
+			}
 	        }
 	}
     /**

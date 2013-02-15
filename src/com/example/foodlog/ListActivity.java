@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.example.foodlog.db.MealRecord;
 import com.example.foodlog.db.MealRecordDao;
+import com.example.foodlog.db.StatisticsRecord;
 import com.example.foodlog.R;
 
 import android.app.Activity;
@@ -32,7 +33,8 @@ public class ListActivity extends Activity implements OnItemClickListener{
 	
     // 一覧表示用ListView
     private ListView listView = null;
-    private ArrayAdapter<MealRecord> arrayAdapter = null;
+//    private ArrayAdapter<MealRecord> arrayAdapter = null;
+    private ArrayAdapter<StatisticsRecord> arrayAdapter = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,8 +46,8 @@ public class ListActivity extends Activity implements OnItemClickListener{
         listView = (ListView) findViewById(R.id.list);
 
         // ListViewに表示する要素を保持するアダプタを生成します。
-        arrayAdapter = new ArrayAdapter<MealRecord>(this,
-                android.R.layout.simple_list_item_1);
+//        arrayAdapter = new ArrayAdapter<MealRecord>(this,android.R.layout.simple_list_item_1);
+        arrayAdapter = new ArrayAdapter<StatisticsRecord>(this,android.R.layout.simple_list_item_1);
 
         // アダプタを設定
         listView.setAdapter(arrayAdapter);
@@ -70,7 +72,7 @@ public class ListActivity extends Activity implements OnItemClickListener{
 	/**
 	 * 一覧データの取得と表示を行うタスク
 	 */
-	public class DataLoadTask extends AsyncTask<Object, Integer, List<MealRecord>> {
+	public class DataLoadTask extends AsyncTask<Object, Integer, List<StatisticsRecord>> {
 	        // 処理中ダイアログ
 	        private ProgressDialog progressDialog = null;
 
@@ -85,14 +87,15 @@ public class ListActivity extends Activity implements OnItemClickListener{
 	        }
 
 	        @Override
-	        protected List<MealRecord> doInBackground(Object... params) {
-	                // 一覧データの取得をバックグラウンドで実行
+	        protected List<StatisticsRecord> doInBackground(Object... params) {
+	            // 一覧データの取得をバックグラウンドで実行
+	        	if(dao==null)
 	                dao = new MealRecordDao(ListActivity.this);
-	                return dao.list();
+	        	return dao.statisticsList(StatisticsRecord.TERM_DAY, StatisticsRecord.MODE_SUM);
 	        }
 
 	        @Override
-	        protected void onPostExecute(List<MealRecord> result) {
+	        protected void onPostExecute(List<StatisticsRecord> result) {
 	                // 処理中ダイアログをクローズ
 	                progressDialog.dismiss();
 
@@ -100,7 +103,7 @@ public class ListActivity extends Activity implements OnItemClickListener{
 	                arrayAdapter.clear();
 
 	                // 表示データの設定
-	                for (MealRecord record : result) {
+	                for (StatisticsRecord record : result) {
 	                        arrayAdapter.add(record);
 	                }
 	        }
@@ -111,13 +114,12 @@ public class ListActivity extends Activity implements OnItemClickListener{
      */
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         // 選択された要素を取得する
-        MealRecord record = (MealRecord)parent.getItemAtPosition( position);
-        // 参照画面へ遷移する明示的インテントを生成
-        Intent recordIntent = new Intent( this, RecordActivity.class);
-        // 選択されたオブジェクトをインテントに詰める
-        recordIntent.putExtra( MealRecord.TABLE_NAME, record);
-        // アクティビティを開始する
-        startActivity( recordIntent);
+        StatisticsRecord record = (StatisticsRecord)parent.getItemAtPosition( position);
+        Intent dailyIntent = new Intent( this, DailyMealListActivity.class);
+        dailyIntent.putExtra( MealRecord.COLUMN_YEAR, record.getYear());			
+        dailyIntent.putExtra( MealRecord.COLUMN_MONTH, record.getMonth());			
+        dailyIntent.putExtra( MealRecord.COLUMN_DAY, record.getDay());
+		startActivity( dailyIntent);   	
     }
     /**
      * オプションメニューの生成

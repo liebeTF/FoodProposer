@@ -6,13 +6,13 @@ import java.util.Locale;
 @SuppressWarnings("serial")
 public class StatisticsRecord implements Serializable {
 
-	public static int TERM_DAY = 0;
-	public static int TERM_MONTH = 1;
-	public static int TERM_YEAR = 2;
+	public static final int TERM_DAY = 0;
+	public static final int TERM_MONTH = 1;
+	public static final int TERM_YEAR = 2;
 
 	
-	public static int MODE_AVERAGE = 0;	//平均
-	public static int MODE_SUM = 1;		//合計
+	public static final int MODE_AVERAGE = 0;	//平均
+	public static final int MODE_SUM = 1;		//合計
 
 	// プロパティ
 	private int term = TERM_DAY;
@@ -84,14 +84,24 @@ public class StatisticsRecord implements Serializable {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		if(year!=null)
-			builder.append(year+"/");
+			builder.append(year);
 		if(month!=null)
-			builder.append(String.format("/%02d",month));
+			builder.append(String.format("/%02d",month+1));
 		if(day!=null)
 			builder.append(String.format("/%02d",day));
-		
-		if( energy != null){
-			builder.append(", ");
+
+		builder.append(", ");
+		switch (mode) {
+		case MODE_SUM:
+			builder.append("合計 ");			
+			break;
+		case MODE_AVERAGE:
+			builder.append("平均 ");			
+			break;
+		default:
+			break;
+		}
+		if( energy != null){			
 			builder.append(energy);
 			builder.append(" kcal");
 
