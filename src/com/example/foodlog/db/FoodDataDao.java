@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
 /**
@@ -35,9 +36,10 @@ public class FoodDataDao {
 			values.put( FoodData.COLUMN_NAME, data.getName());
 			values.put( FoodData.COLUMN_UNIT, data.getUnit());
 			values.put( FoodData.COLUMN_KIND, data.getKind());
-			values.put( FoodData.COLUMN_PROTEIN, data.getProtein());
-			values.put( FoodData.COLUMN_CARBOHYDRATE, data.getCarbohydrate());
-			values.put( FoodData.COLUMN_LIPID, data.getLipid());
+			values.put( FoodData.COLUMN_IMAGE, data.getImage());
+			values.put( MealRecord.COLUMN_PROTEIN, data.getProtein());
+			values.put( MealRecord.COLUMN_CARBOHYDRATE, data.getCarbohydrate());
+			values.put( MealRecord.COLUMN_LIPID, data.getLipid());
 			
 			Long rowId = data.getRowid();
 			// IDÇ™nullÇÃèÍçáÇÕinsert
@@ -130,11 +132,12 @@ public class FoodDataDao {
 		data.setRowid( cursor.getLong(cursor.getColumnIndex(FoodData.COLUMN_ID)));
 		data.setName(cursor.getString(cursor.getColumnIndex(FoodData.COLUMN_NAME)));
 		data.setUnit(cursor.getString(cursor.getColumnIndex(FoodData.COLUMN_UNIT)));
-		data.setKind(cursor.getInt(cursor.getColumnIndex(FoodData.COLUMN_KIND)));
-		data.setProtein(cursor.getDouble(cursor.getColumnIndex(FoodData.COLUMN_PROTEIN)));
-		data.setCarbohydrate(cursor.getDouble(cursor.getColumnIndex(FoodData.COLUMN_CARBOHYDRATE)));
-		data.setLipid(cursor.getDouble(cursor.getColumnIndex(FoodData.COLUMN_LIPID)));
+		data.setKind(cursor.getString(cursor.getColumnIndex(FoodData.COLUMN_KIND)));
+		data.setImage(cursor.getBlob(cursor.getColumnIndex(FoodData.COLUMN_IMAGE)));
 
+		data.setProtein(cursor.getDouble(cursor.getColumnIndex(MealRecord.COLUMN_PROTEIN)));
+		data.setCarbohydrate(cursor.getDouble(cursor.getColumnIndex(MealRecord.COLUMN_CARBOHYDRATE)));
+		data.setLipid(cursor.getDouble(cursor.getColumnIndex(MealRecord.COLUMN_LIPID)));
 		return data;
 	}
 }

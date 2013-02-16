@@ -33,6 +33,7 @@ public class MealRecordDao {
 		MealRecord result = null;
 		try {
 			ContentValues values = new ContentValues();
+			values.put( MealRecord.COLUMN_FOODS, record.getFoodString());
 			values.put( MealRecord.COLUMN_YEAR, record.getYear());
 			values.put( MealRecord.COLUMN_MONTH, record.getMonth());
 			values.put( MealRecord.COLUMN_DAY, record.getDay());
@@ -135,24 +136,6 @@ public class MealRecordDao {
 	 */
 	public List<MealRecord> list() {
 		return list(MealRecord.TABLE_NAME,null,null,null,null,null,MealRecord.COLUMN_ID);
-
-		
-//		SQLiteDatabase db = helper.getReadableDatabase();
-//		List<MealRecord> RecordList = null;
-//		try {
-//			Cursor cursor = db.query( MealRecord.TABLE_NAME, null, null, null, null, null, MealRecord.COLUMN_ID);
-//			RecordList = new ArrayList<MealRecord>();
-//			cursor.moveToFirst();
-//			while( !cursor.isAfterLast()){
-//				RecordList.add( getRecord( cursor));
-//				cursor.moveToNext();
-//			}
-//		} catch(Exception ex){
-//			Log.d(ex.toString(), ex.getMessage());
-//		} finally{
-////			db.close();
-//		}
-//		return RecordList;
 	}
 	/**
 	 * ‚»‚Ì“ú‚Ìˆê——‚ðŽæ“¾‚·‚é
@@ -281,6 +264,7 @@ public class MealRecordDao {
 	private MealRecord getRecord( Cursor cursor){
 		MealRecord record = new MealRecord();
 		record.setRowid( cursor.getLong(cursor.getColumnIndex(MealRecord.COLUMN_ID)));
+		record.setFoodString( cursor.getString(cursor.getColumnIndex(MealRecord.COLUMN_FOODS)));
 		record.setYear( cursor.getInt(cursor.getColumnIndex(MealRecord.COLUMN_YEAR)));
 		record.setMonth(cursor.getInt(cursor.getColumnIndex(MealRecord.COLUMN_MONTH)));
 		record.setDay(cursor.getInt(cursor.getColumnIndex(MealRecord.COLUMN_DAY)));

@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="11"
+        android:minSdkVersion="12"
         android:targetSdkVersion="15" />
 
     <permission 
@@ -57,6 +57,12 @@
         <!-- 日毎一覧アクティビティの定義 -->
         <activity android:name=".DailyMealListActivity"
                   android:label="@string/app_name"/>
-    </application>
+
+                <!-- 食品登録アクティビティの定義 -->
+        <activity android:name=".FoodRegistActivity"
+                  android:label="@string/app_name"/>
+        
+        
+        </application>
 
 </manifest>

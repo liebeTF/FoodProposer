@@ -1,6 +1,5 @@
 package com.example.foodlog;
 
-import java.util.Calendar;
 import java.util.List;
 
 import com.example.foodlog.db.MealRecord;

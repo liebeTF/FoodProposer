@@ -8,6 +8,9 @@
 package com.example.foodlog;
 
 public final class R {
+    public static final class array {
+        public static final int selection=0x7f060000;
+    }
     public static final class attr {
     }
     public static final class drawable {
@@ -15,40 +18,46 @@ public final class R {
         public static final int ic_launcher=0x7f020001;
     }
     public static final class id {
-        public static final int calCalButton=0x7f08000f;
-        public static final int carbohydrateText=0x7f080004;
-        public static final int carbohydrateValue=0x7f080019;
-        public static final int carbohydratelabel=0x7f080018;
-        public static final int dailylabel=0x7f080007;
-        public static final int date=0x7f080013;
-        public static final int dateText=0x7f080000;
-        public static final int datelabel=0x7f080012;
-        public static final int energyText=0x7f080001;
-        public static final int energyValue=0x7f080015;
-        public static final int energylabel=0x7f080014;
-        public static final int lipidText=0x7f080003;
-        public static final int lipidValue=0x7f08001b;
-        public static final int lipidlabel=0x7f08001a;
-        public static final int list=0x7f080005;
-        public static final int listlabel=0x7f080006;
-        public static final int mealTimeText=0x7f08000d;
-        public static final int memberText=0x7f08000e;
-        public static final int menu_delete=0x7f080020;
-        public static final int menu_edit=0x7f080021;
-        public static final int menu_new=0x7f08001c;
-        public static final int menu_save=0x7f08001f;
-        public static final int menu_search=0x7f08001d;
-        public static final int menu_settings=0x7f08001e;
-        public static final int nthText=0x7f08000c;
-        public static final int proteinText=0x7f080002;
-        public static final int proteinValue=0x7f080017;
-        public static final int proteinlabel=0x7f080016;
-        public static final int recordlabel=0x7f080008;
-        public static final int satiety1Text=0x7f08000a;
-        public static final int satiety2Text=0x7f08000b;
-        public static final int satietySeekBar=0x7f080011;
-        public static final int satietySeekBarRoot=0x7f080010;
-        public static final int timeText=0x7f080009;
+        public static final int calCalButton=0x7f090014;
+        public static final int carbohydrateText=0x7f090004;
+        public static final int carbohydrateValue=0x7f09001e;
+        public static final int carbohydratelabel=0x7f09001d;
+        public static final int dailylabel=0x7f09000c;
+        public static final int date=0x7f090018;
+        public static final int dateText=0x7f090000;
+        public static final int datelabel=0x7f090017;
+        public static final int energyText=0x7f090001;
+        public static final int energyValue=0x7f09001a;
+        public static final int energylabel=0x7f090019;
+        public static final int foodImage=0x7f090009;
+        public static final int foodText=0x7f090007;
+        public static final int kindSpinner=0x7f090006;
+        public static final int lipidText=0x7f090003;
+        public static final int lipidValue=0x7f090020;
+        public static final int lipidlabel=0x7f09001f;
+        public static final int list=0x7f090005;
+        public static final int listlabel=0x7f09000b;
+        public static final int mealTimeText=0x7f090012;
+        public static final int memberText=0x7f090013;
+        public static final int menu_delete=0x7f090023;
+        public static final int menu_edit=0x7f090027;
+        public static final int menu_food_regist=0x7f090026;
+        public static final int menu_new=0x7f090021;
+        public static final int menu_save=0x7f090022;
+        public static final int menu_search=0x7f090024;
+        public static final int menu_settings=0x7f090025;
+        public static final int nthText=0x7f090011;
+        public static final int proteinText=0x7f090002;
+        public static final int proteinValue=0x7f09001c;
+        public static final int proteinlabel=0x7f09001b;
+        public static final int recordlabel=0x7f09000d;
+        public static final int satiety1Text=0x7f09000f;
+        public static final int satiety2Text=0x7f090010;
+        public static final int satietySeekBar=0x7f090016;
+        public static final int satietySeekBarRoot=0x7f090015;
+        public static final int setImageButton=0x7f09000a;
+        public static final int timeText=0x7f09000e;
+        public static final int unitSpinner=0x7f090008;
     }
     public static final class integer {
         public static final int days=0x7f040000;
@@ -58,59 +67,65 @@ public final class R {
     }
     public static final class layout {
         public static final int daily_meal_list=0x7f030000;
-        public static final int list=0x7f030001;
-        public static final int main=0x7f030002;
-        public static final int record=0x7f030003;
-        public static final int satiety_seekbar=0x7f030004;
-        public static final int setting=0x7f030005;
-        public static final int show=0x7f030006;
+        public static final int food_regist=0x7f030001;
+        public static final int list=0x7f030002;
+        public static final int main=0x7f030003;
+        public static final int record=0x7f030004;
+        public static final int satiety_seekbar=0x7f030005;
+        public static final int setting=0x7f030006;
+        public static final int show=0x7f030007;
     }
     public static final class menu {
-        public static final int daily_meal_list=0x7f070000;
-        public static final int list=0x7f070001;
-        public static final int main=0x7f070002;
-        public static final int record=0x7f070003;
-        public static final int show=0x7f070004;
+        public static final int daily_meal_list=0x7f080000;
+        public static final int food_regist=0x7f080001;
+        public static final int list=0x7f080002;
+        public static final int main=0x7f080003;
+        public static final int record=0x7f080004;
+        public static final int show=0x7f080005;
     }
     public static final class string {
         public static final int app_name=0x7f050000;
-        public static final int calculattion=0x7f050020;
+        public static final int calculattion=0x7f050024;
         public static final int calorie=0x7f050008;
         public static final int carbohydrateLabel=0x7f050003;
-        public static final int confirm_delete=0x7f050024;
+        public static final int confirm_delete=0x7f050028;
         public static final int data_loading=0x7f050012;
         public static final int dateLabel=0x7f050009;
-        public static final int deleted=0x7f050023;
+        public static final int deleted=0x7f050027;
         public static final int energyLabel=0x7f050001;
-        public static final int error_required=0x7f050025;
-        public static final int error_required_number=0x7f050026;
-        public static final int full=0x7f05001d;
-        public static final int hungry=0x7f05001c;
+        public static final int error_required=0x7f050029;
+        public static final int error_required_number=0x7f05002a;
+        public static final int food_name=0x7f05001c;
+        public static final int full=0x7f050021;
+        public static final int hungry=0x7f050020;
         public static final int lipidLabel=0x7f050004;
         public static final int list=0x7f050016;
         public static final int mealTimeLabel=0x7f05000d;
         public static final int memberLabel=0x7f05000c;
         public static final int menu_delete=0x7f050019;
         public static final int menu_edit=0x7f050013;
+        public static final int menu_food_regist=0x7f05001f;
         public static final int menu_new=0x7f050014;
         public static final int menu_save=0x7f050018;
         public static final int menu_search=0x7f05001a;
         public static final int menu_settings=0x7f050017;
         public static final int month=0x7f05000e;
         public static final int nthLabel=0x7f05000b;
+        public static final int per=0x7f05001d;
         public static final int proteinLabel=0x7f050002;
         public static final int record=0x7f050015;
-        public static final int recorded=0x7f05001e;
+        public static final int recorded=0x7f050022;
         public static final int required=0x7f05001b;
         public static final int satiety1=0x7f050006;
         public static final int satiety2=0x7f050007;
-        public static final int saved=0x7f050022;
+        public static final int saved=0x7f050026;
+        public static final int setImage=0x7f05001e;
         public static final int sum=0x7f050011;
         public static final int timeLabel=0x7f05000a;
         public static final int today=0x7f050010;
-        public static final int uncalculated=0x7f050021;
+        public static final int uncalculated=0x7f050025;
         public static final int unit=0x7f050005;
-        public static final int unrecorded=0x7f05001f;
+        public static final int unrecorded=0x7f050023;
         public static final int year=0x7f05000f;
     }
     public static final class style {
@@ -135,10 +150,10 @@ public final class R {
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f060000;
+        public static final int AppBaseTheme=0x7f070000;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f060001;
+        public static final int AppTheme=0x7f070001;
     }
 }

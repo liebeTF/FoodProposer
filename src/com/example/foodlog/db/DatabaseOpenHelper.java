@@ -5,9 +5,11 @@ import java.util.Arrays;
 import java.util.List;
 
 
+
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
@@ -17,14 +19,15 @@ import android.util.Log;
 public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
 	// データベース名の定数
-	private static final String DB_NAME = "FoodLogDB";	
+	private static final String DB_NAME = "FoodLogDB";
+	private static final Integer VERSION = 1;
 	/**
 	 * コンストラクタ
 	 */
 	public DatabaseOpenHelper(Context context) {
 		// 指定したデータベース名が存在しない場合は、新たに作成されonCreate()が呼ばれる
 		// バージョンを変更するとonUpgrade()が呼ばれる
-		super(context, DB_NAME, null, 1);
+		super(context, DB_NAME, null, VERSION);
 	}
 	
 	/**
@@ -40,6 +43,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 			// MealRecordテーブルの生成
 			createSql.append("create table " + MealRecord.TABLE_NAME + " (");
 			createSql.append(MealRecord.COLUMN_ID + " integer primary key autoincrement not null,");
+			createSql.append(MealRecord.COLUMN_FOODS + " text,");
 			createSql.append(MealRecord.COLUMN_YEAR + " integer not null,");
 			createSql.append(MealRecord.COLUMN_MONTH + " integer not null,");
 			createSql.append(MealRecord.COLUMN_DAY + " integer not null,");
@@ -67,14 +71,16 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 			createSql = new StringBuilder();
 			createSql.append("create table " + FoodData.TABLE_NAME + " (");
 			createSql.append(FoodData.COLUMN_ID + " integer primary key autoincrement not null,");
-			createSql.append(FoodData.COLUMN_NAME + " text unique not null,");
-			createSql.append(FoodData.COLUMN_UNIT + " text not null,");
-			createSql.append(FoodData.COLUMN_KIND + " integer not null,");
-			createSql.append(FoodData.COLUMN_PROTEIN + " real,");
-			createSql.append(FoodData.COLUMN_CARBOHYDRATE + " real,");
-			createSql.append(FoodData.COLUMN_LIPID + " real");
+			createSql.append(FoodData.COLUMN_NAME + " text not null,");
+			createSql.append(FoodData.COLUMN_UNIT + " text default '"+FoodData.units.get(0)+"',");
+			createSql.append(FoodData.COLUMN_KIND + " text dafault 'その他',");
+			createSql.append(FoodData.COLUMN_IMAGE + " blob,");
+			createSql.append(MealRecord.COLUMN_PROTEIN + " real not null,");
+			createSql.append(MealRecord.COLUMN_CARBOHYDRATE + " real not null,");
+			createSql.append(MealRecord.COLUMN_LIPID + " real not null");
 			createSql.append(")");
 			db.execSQL( createSql.toString());
+						
 
 
 			db.setTransactionSuccessful();
@@ -95,7 +101,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 		// 同名のカラムで型に互換性がない場合はエラーになるので注意。
 
 		// 更新対象のテーブル
-		List<String> targetTables = list();
+		List<String> targetTables = list(db);
 		db.beginTransaction();
 		try {
 			for(String targetTable: targetTables){
@@ -120,7 +126,10 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 			db.execSQL("DROP TABLE temp_" + targetTable);
 			}
 			db.setTransactionSuccessful();
-		} finally {
+		} catch(SQLiteException ex){
+			Log.d(ex.toString(), ex.getMessage());
+		}
+		finally {
 			db.endTransaction();
 		}
 	}	
@@ -186,12 +195,14 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 	 * テーブル名一覧を取得する
 	 * @return 検索結果
 	 */
-	public List<String> list() {
-		SQLiteDatabase db = getReadableDatabase();
-		
+	public List<String> list(SQLiteDatabase db) {
+		if(db==null){
+			db = getReadableDatabase();
+		}
 		List<String> tableList;
+		Cursor cursor = null;
 		try {
-			Cursor cursor = db.rawQuery("SELECT * FROM sqlite_master WHERE type='table' ", null);
+			cursor = db.rawQuery("SELECT * FROM sqlite_master WHERE type='table' ", null);
 			Log.d("個数", String.valueOf(cursor.getCount()));
 			tableList = new ArrayList<String>();
 			cursor.moveToFirst();
@@ -203,7 +214,9 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 				}
 				cursor.moveToNext();
 			}
-		} finally {
+		} finally {	
+			if(cursor != null)
+				cursor.close();
 		}
 		return tableList;
 	}

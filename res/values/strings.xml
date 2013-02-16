@@ -31,7 +31,11 @@
     <string name="menu_delete">削除</string>
     <string name="menu_search">検索</string>
     <string name="required">必須項目</string>
-
+    <string name="food_name">食品名</string>
+    <string name="per">当たり</string>
+    <string name="setImage">画像設定</string>
+    <string name="menu_food_regist">食品登録</string>
+    
     <string name="hungry">空腹</string>
     <string name="full">満腹</string>
         
@@ -44,6 +48,9 @@
 	<string name="confirm_delete">削除してよろしいですか？</string>
     <string name="error_required">必須項目を入力してください</string>
     <string name="error_required_number">数値で入力してください</string>
-    
+    <string-array name="selection">
+        <item >選択肢１</item>
+    </string-array>
+ 
 
 </resources>

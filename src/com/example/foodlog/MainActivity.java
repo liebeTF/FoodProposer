@@ -4,12 +4,18 @@ package com.example.foodlog;
 import java.util.Calendar;
 
 import com.example.foodlog.R;
+import com.example.foodlog.db.DatabaseOpenHelper;
+import com.example.foodlog.db.MealRecord;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.TextView;
 
 public class MainActivity extends Activity implements View.OnClickListener{
@@ -70,5 +76,21 @@ public class MainActivity extends Activity implements View.OnClickListener{
 			break;
 		}
 	}
+    /**
+     * オプションメニューの選択
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        switch (itemId) {
+        case R.id.menu_settings:
+            break;
+        case R.id.menu_food_regist:
+        	Intent foodIntent = new Intent(this,FoodRegistActivity.class);
+        	startActivity(foodIntent);
+            break;
+        }
+        return true;
+    };
 
 }

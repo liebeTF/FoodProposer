@@ -1,6 +1,9 @@
 package com.example.foodlog.db;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 @SuppressWarnings("serial")
@@ -11,6 +14,7 @@ public class MealRecord implements Serializable {
 	
 	// カラム名
 	public static final String COLUMN_ID = "_id";
+	public static final String COLUMN_FOODS = "food";
 	public static final String COLUMN_YEAR = "year";
 	public static final String COLUMN_MONTH = "month";
 	public static final String COLUMN_DAY = "day";
@@ -28,15 +32,16 @@ public class MealRecord implements Serializable {
 	public static final String COLUMN_LIPID = "lipid";
 	public static final String COLUMN_ENERGY = "energy";
 	
-	static private Double E_PROTEIN = 4.0;
-	static private Double E_CARBOHYDRATE = 4.0;
-	static private Double E_LIPID = 9.0;
+	static public Double E_PROTEIN = 4.0;
+	static public Double E_CARBOHYDRATE = 4.0;
+	static public Double E_LIPID = 9.0;
 	
 	
 
 	
 	// プロパティ
 	private Long rowid = null;
+	private List<String> foods = null;
 	private Integer year = null;
 	private Integer month = null;
 	private Integer day = null;
@@ -48,7 +53,7 @@ public class MealRecord implements Serializable {
 	private Integer satiety1 = null;
 	private Integer satiety2 = null;
 	private Integer member = null;
-
+	
 	private Double protein = null;
 	private Double carbohydrate = null;
 	private Double lipid = null;
@@ -191,5 +196,39 @@ public class MealRecord implements Serializable {
 	}
 	public void setMember(Integer member) {
 		this.member = member;
+	}
+	public List<String> getFoods() {
+		return foods;
+	}
+	public void setFoods(List<String> foods) {
+		this.foods = foods;
+	}
+	/**
+	 * ”/”で区切られたfoodsをList<String>でセット
+	 * @param foods
+	 */
+	public void setFoodString(String foods) {
+		this.foods =  Arrays.asList( foods.split("/"));
+	}
+	public String getFoodString() {
+		return DatabaseOpenHelper.join(foods, "/");
+	}
+	public boolean addFood(String food){
+		return foods.add(food);
+	}
+	public boolean removeFood(String food){
+		return foods.remove(food);
+	}
+	public boolean addFood(String food, Double protein, Double carbohydrate, Double lipid){
+		this.protein += protein;
+		this.carbohydrate += carbohydrate;
+		this.lipid += lipid;
+		return foods.add(food);
+	}
+	public boolean removeFood(String food, Double protein, Double carbohydrate, Double lipid){
+		this.protein -= protein;
+		this.carbohydrate -= carbohydrate;
+		this.lipid -= lipid;
+		return foods.remove(food);
 	}
 }
