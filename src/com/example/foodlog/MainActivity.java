@@ -23,7 +23,8 @@ public class MainActivity extends Activity implements View.OnClickListener{
 	final static Integer year = calendar.get(Calendar.YEAR);
 	final static Integer month = calendar.get(Calendar.MONTH);
 	final static Integer day = calendar.get(Calendar.DAY_OF_MONTH);
-		
+	public static DatabaseOpenHelper helper;
+	
 	private TextView listlabel;
 	private TextView dailylabel;
 	private TextView recordlabel;
@@ -32,6 +33,8 @@ public class MainActivity extends Activity implements View.OnClickListener{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		helper  = new DatabaseOpenHelper(this);
+		
 		
 		listlabel = (TextView)findViewById( R.id.listlabel);
 		listlabel.setOnClickListener(this);
@@ -86,8 +89,9 @@ public class MainActivity extends Activity implements View.OnClickListener{
         case R.id.menu_settings:
             break;
         case R.id.menu_food_regist:
-        	Intent foodIntent = new Intent(this,FoodRegistActivity.class);
-        	startActivity(foodIntent);
+        	startActivity(new Intent(this,FoodListActivity.class));
+//        	Intent foodIntent = new Intent(this,FoodRegistActivity.class);
+//      	startActivity(foodIntent);
             break;
         }
         return true;

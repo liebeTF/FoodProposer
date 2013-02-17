@@ -17,6 +17,10 @@ import android.graphics.BitmapFactory;
 public class FoodData implements Serializable {
 	
 	public static final List<String> units = Arrays.asList("100g","200ml","1個","1食","1枚");
+	public static final List<String> kinds = Arrays.asList(
+			"主食","主菜","副菜","飲み物","果物",
+			"外食","間食","その他"
+			);
 	public static final Integer Staple = 0;//主食
 	public static final Integer MainDish = 1;//主菜
 	public static final Integer SideDish = 2;//副菜
@@ -25,17 +29,19 @@ public class FoodData implements Serializable {
 	public static final Integer EatOut = 5;//外食
 	public static final Integer Snack = 6;//間食	
 	public static final Integer Others =7;//その他
-	public static final Map<String,Integer> kinds = Collections.unmodifiableMap(new HashMap<String, Integer>(){{
-		put("主食",Staple);
-		put("主菜",MainDish);
-		put("副菜",SideDish);
-		put("飲み物",Drink);
-		put("果物",Fruit);
-		put("外食",EatOut);
-		put("間食",Snack);
-		put("その他",Others);
-	}});
-
+//	public static final Map<String, Integer> kinds = Collections
+//			.unmodifiableMap(new HashMap<String, Integer>() {
+//				{
+//					put("主食", Staple);
+//					put("主菜", MainDish);
+//					put("副菜", SideDish);
+//					put("飲み物", Drink);
+//					put("果物", Fruit);
+//					put("外食", EatOut);
+//					put("間食", Snack);
+//					put("その他", Others);
+//				}
+//			});
 	
 	
 	private static final int BLOB_SIZE_MAX = 500000;	
@@ -51,11 +57,9 @@ public class FoodData implements Serializable {
 	public static final String COLUMN_NAME = "name";
 	public static final String COLUMN_UNIT = "unit";	
 	public static final String COLUMN_KIND = "kind";
-	
-//	public static final String COLUMN_PROTEIN = "protein";
-//	public static final String COLUMN_CARBOHYDRATE = "carbohydrate";
-//	public static final String COLUMN_LIPID = "lipid";
-	public static final String COLUMN_IMAGE = "image";	
+	public static final String COLUMN_SATISFACTION = "satisfaction";
+	public static final String COLUMN_ATE_DATE = "ate_date";	
+	public static final String COLUMN_IMAGE = "image";
 	
 	
 
@@ -65,10 +69,14 @@ public class FoodData implements Serializable {
 	private String name = null;
 	private String unit = null;
 	private String kind = null;
-
+	
+	private Integer satisfaction = null;
+	private Integer date = null;
+	
 	private Double protein = null;
 	private Double carbohydrate = null;
 	private Double lipid = null;
+
 	private byte[] image = null;
 	
 
@@ -117,30 +125,45 @@ public class FoodData implements Serializable {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		Integer pfc[] = calcPFCpropotion();
+		builder.append(kind);
+		builder.append(": ");
 		builder.append(name);
 		builder.append(", ");
 		builder.append(pfc[0] + ":" + pfc[1] + ":" + pfc[2]);
 		return builder.toString();
 	}
 	public Integer[] calcPFCpropotion(){
-		Integer energy = MealRecord.calcEnergy(protein,carbohydrate,lipid);
+		Integer energy = getEnergy();
 		return new Integer[]{
 				(int)(100 * this.protein*MealRecord.E_PROTEIN / energy),
 				(int)(100 * this.carbohydrate* MealRecord.E_CARBOHYDRATE / energy),
 				(int)(100 * this.lipid * MealRecord.E_LIPID / energy)
 				};
 	}
+	public Integer getEnergy() {
+		return MealRecord.calcEnergy(protein,carbohydrate,lipid);
+	}
 	public String getKind() {
 		return kind;
 	}
-	public void setKind(String kind) {
-		this.kind = kind;
+	public boolean setKind(String kind) {
+		if(kinds.contains(kind)){
+			this.kind = kind;
+			return true;
+		}else{
+			return false;
+		}
 	}
 	public String getUnit() {
 		return unit;
 	}
-	public void setUnit(String unit){
+	public boolean setUnit(String unit){
+		if(units.contains(unit)){
 			this.unit = unit;
+			return true;
+		}else{
+			return false;
+		}
 	}
 	public Bitmap getImageBitamp() {
 		return BitmapFactory.decodeByteArray(image, 0, image.length);
@@ -167,5 +190,62 @@ public class FoodData implements Serializable {
 	}
 	public byte[] getImage() {
 		return this.image;
+	}
+	public Integer getYear(){
+		return date/10000;
+	}
+	public Integer getMonth(){
+		return (date/100)%100;
+	}
+	public Integer getday(){
+		return date%100;
+	}
+	public Integer getDate() {
+		return date;
+	}
+	public void setDate(Integer date) {
+		this.date = date;
+	}
+	public void setDate(Integer year,Integer month,Integer day) {
+		this.date = year * 10000 + month* 100 * day;
+	}
+	public Integer getSatisfaction() {
+		return satisfaction;
+	}
+	public void setSatisfaction(Integer satisfaction) {
+		if(satisfaction<0){
+			satisfaction = 0;
+		}else if(satisfaction>100){
+			satisfaction = 100;
+		}
+		this.satisfaction = satisfaction;
+	}
+	static public FoodData copyFood(FoodData data){
+		FoodData result = new FoodData();
+		result.setName(nextName(data.getName()));
+		result.setKind(data.getKind());
+		result.setUnit(data.getUnit());
+		result.setProtein(data.getProtein());
+		result.setCarbohydrate(data.getCarbohydrate());
+		result.setLipid(data.getLipid());
+		result.setSatisfaction(data.getSatisfaction());
+		return result; 
+	}
+	static public String nextName(String name){
+		Integer start=name.lastIndexOf("(");
+		if(start < 0)
+			return name+"(2)";
+		Integer end=name.lastIndexOf(")");
+		if(start < 0)
+			return name+"(2)";
+		String numStr = name.substring(start+1,end);
+		Integer num;
+		try{
+			num = Integer.valueOf(numStr);
+			++num;
+		}catch(NumberFormatException ex){
+			return name+"(2)";
+		}		
+		return name.substring(0,start) + "("+ num +")";
 	}
 }

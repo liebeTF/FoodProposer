@@ -120,7 +120,8 @@ public class MealRecordDao {
 			RecordList = new ArrayList<MealRecord>();
 			cursor.moveToFirst();
 			while( !cursor.isAfterLast()){
-				RecordList.add( getRecord( cursor));
+				MealRecord record = getRecord( cursor); 
+				RecordList.add( record );
 				cursor.moveToNext();
 			}
 		}catch(Exception ex){
@@ -242,7 +243,7 @@ public class MealRecordDao {
 			statistics.setProtein(protein);
 			statistics.setCarbohydrate(carbohydrate);
 			statistics.setLipid(lipid);
-			statistics.setEnergy(energy);
+//			statistics.setEnergy(energy);
 			if (flag_year)
 				statistics.setYear(year);
 			if (flag_month)
@@ -382,8 +383,8 @@ public class MealRecordDao {
 			record.setCarbohydrate(cursor.getDouble(cursor.getColumnIndex(MealRecord.COLUMN_CARBOHYDRATE)));
 		if(!cursor.isNull((cursor.getColumnIndex(MealRecord.COLUMN_LIPID))))
 			record.setLipid(cursor.getDouble(cursor.getColumnIndex(MealRecord.COLUMN_LIPID)));
-		if(!cursor.isNull((cursor.getColumnIndex(MealRecord.COLUMN_ENERGY))))
-			record.setEnergy(cursor.getInt(cursor.getColumnIndex(MealRecord.COLUMN_ENERGY)));
+//		if(!cursor.isNull((cursor.getColumnIndex(MealRecord.COLUMN_ENERGY))))
+//			record.setEnergy(cursor.getInt(cursor.getColumnIndex(MealRecord.COLUMN_ENERGY)));
 		switch (term) {
 		case StatisticsRecord.TERM_DAY:
 			record.setYear( cursor.getInt(cursor.getColumnIndex(MealRecord.COLUMN_YEAR)));

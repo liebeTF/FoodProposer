@@ -1,7 +1,6 @@
 package com.example.foodlog;
 
 import java.io.InputStream;
-import java.util.Map;
 
 import com.example.foodlog.db.FoodData;
 import com.example.foodlog.db.FoodDataDao;
@@ -26,6 +25,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,6 +49,7 @@ public class FoodRegistActivity extends Activity {
     private EditText proteinText = null;
     private EditText carbohydrateText = null;
     private EditText lipidText = null;
+    private SeekBar satisfactionBar = null;
     private ImageView foodImage = null;
     private Button setImageButton = null;
 
@@ -82,6 +83,8 @@ public class FoodRegistActivity extends Activity {
 		lipidText = (EditText) findViewById(R.id.lipidText);
 		lipidText.setInputType(InputType.TYPE_CLASS_NUMBER);
 		
+		satisfactionBar = (SeekBar)findViewById(R.id.satisfactionBar);		
+		
 		foodImage = (ImageView)findViewById(R.id.foodImage);
 		setImageButton = (Button)findViewById(R.id.setImageButton);
 		setImageButton.setOnClickListener(new OnClickListener() {		
@@ -94,59 +97,17 @@ public class FoodRegistActivity extends Activity {
 				startActivityForResult(intent, REQUEST_GALLERY);							
 			}
 		});
+		kindAdapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_item);
+		kindSpinner.setAdapter(kindAdapter);
+		kindSpinner.setOnItemSelectedListener(new OnItemSelectedListener());
 
-		if (food != null) {
-			// UI部品に値を設定
-			kindAdapter = new ArrayAdapter<String>(this,
-					android.R.layout.simple_spinner_item);
-			kindSpinner.setAdapter(kindAdapter);
-			kindSpinner.setOnItemSelectedListener(new OnItemSelectedListener());
-			for (Map.Entry<String,Integer> kind : FoodData.kinds.entrySet()) {
-				kindAdapter.add(kind.getKey());
-			}
-			String str = food.getKind();
-			if(str!=null){
-				kindSpinner.setSelection(FoodData.kinds.get(str));
-			}else{	
-				kindSpinner.setSelection(0);
-			}
-
-			foodText.setText(food.getName());
-			
-			unitAdapter = new ArrayAdapter<String>(this,
-					android.R.layout.simple_spinner_item);
-			unitSpinner.setAdapter(unitAdapter);
-			unitSpinner.setOnItemSelectedListener(new OnItemSelectedListener());
-			Integer i = 0;
-			boolean flag = false;
-			for (String unit: FoodData.units) {
-				unitAdapter.add(unit);
-				if(unit.equals(food.getUnit())){
-					kindSpinner.setSelection(i);
-					flag = true;
-				}
-				++i;
-			}
-			if(!flag)
-				kindSpinner.setSelection(0);
-
-			
-			if (food.getProtein() != null)
-				proteinText.setText(String.valueOf(food.getProtein()));
-
-			if (food.getCarbohydrate() != null)
-				carbohydrateText
-						.setText(String.valueOf(food.getCarbohydrate()));
-
-			if (food.getLipid() != null)
-				lipidText.setText(String.valueOf(food.getLipid()));
-			
-			if(food.getImage() != null)
-				foodImage.setImageBitmap(food.getImageBitamp());
-
-		} else {// foodがnull
-			finish();
-		}
+		unitAdapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_item);
+		unitSpinner.setAdapter(unitAdapter);
+		unitSpinner.setOnItemSelectedListener(new OnItemSelectedListener());
+		
+		setView();
 
 	}
 
@@ -163,12 +124,14 @@ public class FoodRegistActivity extends Activity {
 	/**
 	 * 画面のクリア
 	 */
-	private void clear(){
-		food = null;
+	private void refleshView(){
 		kindAdapter.clear();
+		unitAdapter.clear();
 		proteinText.setText(null);
 		carbohydrateText.setText(null);
-		lipidText.setText(null);		
+		lipidText.setText(null);
+		foodImage.setImageResource(R.drawable.ic_launcher);
+		setView();		
 	}
 
 	/**
@@ -180,11 +143,11 @@ public class FoodRegistActivity extends Activity {
 		switch (itemId) {
 			// 新規
 		case R.id.menu_new:
-			clear();
+			food = new FoodData();
+			refleshView();
 			break;
 			// 保存
 		case R.id.menu_save:
-			
 			if(menu_save()){
 				// 保存時に終了し、前のアクティビティへ戻る
 				setResult( RESULT_OK);
@@ -206,16 +169,13 @@ public class FoodRegistActivity extends Activity {
 				public void onClick(DialogInterface dialog, int whichButton) {
 					// 削除処理
 					FoodDataDao dao = new FoodDataDao( FoodRegistActivity.this);
-					dao.delete( food);
-					
-					// 画面の更新
-					clear();
+					dao.delete( food);					
 					
 					// メッセージ表示
 					Toast toast = Toast.makeText(FoodRegistActivity.this, R.string.deleted, Toast.LENGTH_SHORT);
-					toast.show();
-					
-					Intent listIntent = new Intent(FoodRegistActivity.this,ListActivity.class);
+					toast.show();	
+
+					Intent listIntent = new Intent(FoodRegistActivity.this,FoodListActivity.class);
 					startActivity(listIntent);
 				}
 			});
@@ -224,10 +184,63 @@ public class FoodRegistActivity extends Activity {
 			// ダイアログの表示
 			builder.show();
 			break;
+		case R.id.menu_copy:
+			food = FoodData.copyFood(food);
+			refleshView();
+			break;
 		}
 		return true;
 	}
+	private void setView(){
+		if (food != null) {
+			// UI部品に値を設定
+			kindAdapter.add("選択必須");
+			Integer i = 1;
+			kindSpinner.setSelection(0);			
+			for (String kind: FoodData.kinds) {
+				kindAdapter.add(kind);
+				if(kind.equals(food.getKind())){
+					kindSpinner.setSelection(i);
+				}
+				++i;
+			}
+
+			foodText.setText(food.getName());
+			
+			i = 1;
+			unitAdapter.add("選択必須");
+			unitSpinner.setSelection(0);			
+			for (String unit: FoodData.units) {
+				unitAdapter.add(unit);
+				if(unit.equals(food.getUnit())){
+					unitSpinner.setSelection(i);
+				}
+				++i;
+			}
+
+			
+			if (food.getProtein() != null)
+				proteinText.setText(String.valueOf(food.getProtein()));
+
+			if (food.getCarbohydrate() != null)
+				carbohydrateText.setText(String.valueOf(food.getCarbohydrate()));
+
+			if (food.getLipid() != null)
+				lipidText.setText(String.valueOf(food.getLipid()));
+
+			if (food.getSatisfaction() != null)
+				satisfactionBar.setProgress(food.getSatisfaction());
+
+			if(food.getImage() != null)
+				foodImage.setImageBitmap(food.getImageBitamp());
+
+		} else {// foodがnull
+			finish();
+		}
+		
+	}
 	
+	//保存
 	private Boolean menu_save(){
 		if( food == null){
 			return false;
@@ -239,8 +252,19 @@ public class FoodRegistActivity extends Activity {
 
 	
 		// 入力チェック
-		food.setKind((String)kindSpinner.getSelectedItem());
-		food.setUnit((String)unitSpinner.getSelectedItem());
+		str = (String)kindSpinner.getSelectedItem();
+		if(!food.setKind(str)){
+			Toast.makeText(this,R.string.error_required,
+					Toast.LENGTH_SHORT).show();
+			return false;			
+		}
+
+		str = (String)unitSpinner.getSelectedItem();
+		if(!food.setUnit(str)){
+			Toast.makeText(this,R.string.error_required,
+					Toast.LENGTH_SHORT).show();
+			return false;			
+		}
 		
 		str = foodText.getText().toString();
 		if(!str.equals("")){
@@ -289,7 +313,11 @@ public class FoodRegistActivity extends Activity {
 						Toast.LENGTH_SHORT).show();
 				return false;
 			}
-		}			
+		}
+		food.setSatisfaction(satisfactionBar.getProgress());
+
+		if(food.getDate()==null)
+			food.setDate(20000001);
 
 		
 		// 更新処理
@@ -313,16 +341,17 @@ public class FoodRegistActivity extends Activity {
 		// TODO Auto-generated method stub
 		if(requestCode == REQUEST_GALLERY && resultCode == RESULT_OK) {
 			try {
-				InputStream in = getContentResolver().openInputStream(data.getData());
+				InputStream in = getContentResolver().openInputStream(
+						data.getData());
 				Bitmap img = BitmapFactory.decodeStream(in);
 				in.close();
 				// 選択した画像を表示
 				food.setImageBitmap(img);
 				foodImage.setImageBitmap(food.getImageBitamp());
-				}catch (Exception ex){
-					Log.d(ex.toString(), ex.getMessage());
-				}finally{
-				}
+			} catch (Exception ex) {
+				Log.d(ex.toString(), ex.getMessage());
+			} finally {
+			}
 		}
 	}
 	

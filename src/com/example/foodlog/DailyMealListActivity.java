@@ -42,6 +42,7 @@ public class DailyMealListActivity extends Activity implements OnItemClickListen
 	private TextView carbohydrateText;
 	private TextView lipidText;
 	private TextView energyText;
+	private Integer energyMax;
 	
 	
     // 一覧表示用ListView
@@ -53,6 +54,7 @@ public class DailyMealListActivity extends Activity implements OnItemClickListen
         super.onCreate(savedInstanceState);
         // 自動生成されたR.javaの定数を指定してXMLからレイアウトを生成
         setContentView(R.layout.daily_meal_list);
+        energyMax = 2000;
         
 		// インテントからオブジェクトを取得
 		Intent intent = getIntent();
@@ -112,28 +114,28 @@ public class DailyMealListActivity extends Activity implements OnItemClickListen
 	 * 一覧データの取得と表示を行うタスク
 	 */
 	public class DataLoadTask extends AsyncTask<Object, Integer, List<MealRecord>> {
-	        // 処理中ダイアログ
-	        private ProgressDialog progressDialog = null;
+		// 処理中ダイアログ
+		private ProgressDialog progressDialog = null;
 
-	        @Override
-	        protected void onPreExecute() {
-	                // バックグラウンドの処理前にUIスレッドでダイアログ表示
-	                progressDialog = new ProgressDialog(DailyMealListActivity.this);
-	                progressDialog.setMessage(getResources().getText(
-	                                R.string.data_loading));
-	                progressDialog.setIndeterminate(true);
-	                progressDialog.show();
-	        }
+		@Override
+		protected void onPreExecute() {
+			// バックグラウンドの処理前にUIスレッドでダイアログ表示
+			progressDialog = new ProgressDialog(DailyMealListActivity.this);
+			progressDialog.setMessage(getResources().getText(
+					R.string.data_loading));
+			progressDialog.setIndeterminate(true);
+			progressDialog.show();
+		}
 
-	        @Override
-	        protected List<MealRecord> doInBackground(Object... params) {
-	                // 一覧データの取得をバックグラウンドで実行
-	                dao = new MealRecordDao(DailyMealListActivity.this);
-	                return dao.list(year,month,day,MealRecord.COLUMN_NTH);
-	        }
+		@Override
+		protected List<MealRecord> doInBackground(Object... params) {
+			// 一覧データの取得をバックグラウンドで実行
+			dao = new MealRecordDao(DailyMealListActivity.this);
+			return dao.list(year, month, day, MealRecord.COLUMN_NTH);
+		}
 
-	        @Override
-	        protected void onPostExecute(List<MealRecord> result) {
+		@Override
+		protected void onPostExecute(List<MealRecord> result) {
 			// 処理中ダイアログをクローズ
 			progressDialog.dismiss();
 
@@ -144,7 +146,8 @@ public class DailyMealListActivity extends Activity implements OnItemClickListen
 			// Double lipidSum=0.0;
 
 			// 表示データの設定
-			statistics = dao.listToStatistics(result, StatisticsRecord.MODE_SUM);
+			statistics = dao
+					.listToStatistics(result, StatisticsRecord.MODE_SUM);
 			for (MealRecord record : result) {
 				// proteinSum += (record.getProtein()==null)?
 				// 0:record.getProtein();
@@ -159,15 +162,14 @@ public class DailyMealListActivity extends Activity implements OnItemClickListen
 			// carbohydrateText.setText("C " +carbohydrateSum+" g");
 			// lipidText.setText("F " +lipidSum+" g");
 			if (statistics != null) {
-				energyText.setText(MealRecord.calcEnergy(
-						statistics.getProtein(), statistics.getCarbohydrate(),
-						statistics.getLipid()) + " kcal ");
+				energyText.setText(statistics.getEnergy() + " kcal ");
+				energyMax -= (statistics.getEnergy() != null)? statistics.getEnergy() : 0;
 				proteinText.setText("P " + statistics.getProtein() + " g");
 				carbohydrateText.setText("C " + statistics.getCarbohydrate()
 						+ " g");
 				lipidText.setText("F " + statistics.getLipid() + " g");
 			}
-	        }
+		}
 	}
     /**
      * List要素クリック時の処理
@@ -201,7 +203,6 @@ public class DailyMealListActivity extends Activity implements OnItemClickListen
         int itemId = item.getItemId();
         switch (itemId) {
         case R.id.menu_new:
-
 			final Intent recordIntent = new Intent(DailyMealListActivity.this , RecordActivity.class);
 			final MealRecord record = new MealRecord();
 			record.setYear(year);
@@ -222,6 +223,12 @@ public class DailyMealListActivity extends Activity implements OnItemClickListen
 					}, MainActivity.calendar.get(Calendar.HOUR_OF_DAY), MainActivity.calendar.get(Calendar.MINUTE), true).show();
 
             break;
+        case R.id.menu_spare_meal:
+        	Calendar cal = Calendar.getInstance();
+        	cal.add(Calendar.DATE, 7);
+        	Integer date = cal.get(Calendar.YEAR)*10000 + cal.get(Calendar.MONTH)*100 + cal.get(Calendar.DAY_OF_MONTH);
+        	new FoodListDialog(this,energyMax,date,false).show();
+        	break;
         }
         return true;
     };

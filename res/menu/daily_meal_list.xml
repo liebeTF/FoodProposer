@@ -5,4 +5,8 @@
         android:id="@+id/menu_new"
         android:title="@string/menu_new"
         android:icon="@android:drawable/ic_menu_add" />  
+    <item
+        android:id="@+id/menu_spare_meal"
+        android:title="@string/menu_spare_meal"
+        android:icon="@android:drawable/ic_menu_search" />  
 </menu>

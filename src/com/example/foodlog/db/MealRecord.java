@@ -14,7 +14,7 @@ public class MealRecord implements Serializable {
 	
 	// カラム名
 	public static final String COLUMN_ID = "_id";
-	public static final String COLUMN_FOODS = "food";
+	public static final String COLUMN_FOODS = "foods";
 	public static final String COLUMN_YEAR = "year";
 	public static final String COLUMN_MONTH = "month";
 	public static final String COLUMN_DAY = "day";
@@ -41,7 +41,7 @@ public class MealRecord implements Serializable {
 	
 	// プロパティ
 	private Long rowid = null;
-	private List<String> foods = null;
+	private List<String> foods = null;//食品名 　量のリスト
 	private Integer year = null;
 	private Integer month = null;
 	private Integer day = null;
@@ -170,7 +170,15 @@ public class MealRecord implements Serializable {
 	public void setEnergy(Integer energy) {
 		this.energy = energy;
 	}
-	static public int calcEnergy(Double protein, Double carbohydrate, Double lipid){
+	static public Integer calcEnergy(Double protein, Double carbohydrate, Double lipid){
+		if(protein==null && carbohydrate==null && lipid==null)
+			return null;
+		if(protein == null)
+			protein = 0.0;
+		if(carbohydrate == null)
+			carbohydrate = 0.0;
+		if(lipid == null)
+			lipid=0.0;
 		return (int)(protein*E_PROTEIN + carbohydrate * E_CARBOHYDRATE + lipid * E_LIPID);
 	}
 	public Integer getSatiety1() {
@@ -208,7 +216,8 @@ public class MealRecord implements Serializable {
 	 * @param foods
 	 */
 	public void setFoodString(String foods) {
-		this.foods =  Arrays.asList( foods.split("/"));
+		if(foods != null)
+			this.foods =  Arrays.asList( foods.split("/"));
 	}
 	public String getFoodString() {
 		return DatabaseOpenHelper.join(foods, "/");

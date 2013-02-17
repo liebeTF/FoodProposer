@@ -86,9 +86,36 @@
 			android:layout_height="wrap_content"
 			android:inputType="number"/>			
 	</TableRow>
-	<ImageView 
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.05"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/hate" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/favorite" />
+    </LinearLayout>
+    
+     <SeekBar
+	        android:id="@+id/satisfactionBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:progress="50"
+            android:max="100"
+            />
+	<ImageView
+	    android:contentDescription="@string/image"
 	    android:id="@+id/foodImage"
-	    android:src="@drawable/ic_launcher"
+	    android:src="@drawable/ic_launcher" 
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    />

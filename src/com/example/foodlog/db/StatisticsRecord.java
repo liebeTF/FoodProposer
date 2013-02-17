@@ -25,7 +25,6 @@ public class StatisticsRecord implements Serializable {
 	private Double protein = null;
 	private Double carbohydrate = null;
 	private Double lipid = null;
-	private Integer energy = null;
 	
 
 		
@@ -101,8 +100,8 @@ public class StatisticsRecord implements Serializable {
 		default:
 			break;
 		}
-		if( energy != null){			
-			builder.append(energy);
+		if( getEnergy() != null){			
+			builder.append(getEnergy());
 			builder.append(" kcal");
 
 		}
@@ -110,10 +109,7 @@ public class StatisticsRecord implements Serializable {
 		return builder.toString();
 	}
 	public Integer getEnergy() {
-		return energy;
-	}
-	public void setEnergy(Integer energy) {
-		this.energy = energy;
+		return MealRecord.calcEnergy(protein, carbohydrate, lipid);
 	}
 	public Integer getMealCount() {
 		return mealCount;

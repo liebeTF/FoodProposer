@@ -37,6 +37,8 @@ public class FoodDataDao {
 			values.put( FoodData.COLUMN_UNIT, data.getUnit());
 			values.put( FoodData.COLUMN_KIND, data.getKind());
 			values.put( FoodData.COLUMN_IMAGE, data.getImage());
+			values.put( FoodData.COLUMN_ATE_DATE, data.getDate());
+			values.put( FoodData.COLUMN_SATISFACTION, data.getSatisfaction());
 			values.put( MealRecord.COLUMN_PROTEIN, data.getProtein());
 			values.put( MealRecord.COLUMN_CARBOHYDRATE, data.getCarbohydrate());
 			values.put( MealRecord.COLUMN_LIPID, data.getLipid());
@@ -101,6 +103,13 @@ public class FoodDataDao {
 	 * àÍóóÇéÊìæÇ∑ÇÈ
 	 * @return åüçıåãâ 
 	 */
+	public List<FoodData> list(String kind) {
+		return list(FoodData.COLUMN_KIND + "=?" , new String[]{kind},null,null,FoodData.COLUMN_ID);
+	}
+	/**
+	 * àÍóóÇéÊìæÇ∑ÇÈ
+	 * @return åüçıåãâ 
+	 */
 	public List<FoodData> list(String selection, String[] selectionArgs,String groupBy, String having, String orderBy) {
 		SQLiteDatabase db = helper.getReadableDatabase();
 		
@@ -115,7 +124,7 @@ public class FoodDataDao {
 		}catch(Exception ex){
 			Log.d(ex.toString(), ex.getMessage());
 		} finally {
-			db.close();
+//			db.close();
 		}
 		return dataList;
 	}
@@ -133,12 +142,41 @@ public class FoodDataDao {
 		data.setName(cursor.getString(cursor.getColumnIndex(FoodData.COLUMN_NAME)));
 		data.setUnit(cursor.getString(cursor.getColumnIndex(FoodData.COLUMN_UNIT)));
 		data.setKind(cursor.getString(cursor.getColumnIndex(FoodData.COLUMN_KIND)));
-		data.setImage(cursor.getBlob(cursor.getColumnIndex(FoodData.COLUMN_IMAGE)));
+		data.setDate(cursor.getInt(cursor.getColumnIndex(FoodData.COLUMN_ATE_DATE)));
+		data.setSatisfaction(cursor.getInt(cursor.getColumnIndex(FoodData.COLUMN_SATISFACTION)));
+
+		if(!cursor.isNull((cursor.getColumnIndex(FoodData.COLUMN_IMAGE))))
+			data.setImage(cursor.getBlob(cursor.getColumnIndex(FoodData.COLUMN_IMAGE)));
 
 		data.setProtein(cursor.getDouble(cursor.getColumnIndex(MealRecord.COLUMN_PROTEIN)));
 		data.setCarbohydrate(cursor.getDouble(cursor.getColumnIndex(MealRecord.COLUMN_CARBOHYDRATE)));
 		data.setLipid(cursor.getDouble(cursor.getColumnIndex(MealRecord.COLUMN_LIPID)));
 		return data;
+	}
+	
+	public List<FoodData> foodList(Integer energyMax,Integer date,Boolean mustImage){
+		SQLiteDatabase db = helper.getReadableDatabase();
+		
+		List<FoodData> dataList	 = new ArrayList<FoodData>();
+		try {
+			String selection = FoodData.COLUMN_ATE_DATE +" < "+ date;
+			Cursor cursor = db.query( FoodData.TABLE_NAME, null, selection, null, null, null, FoodData.COLUMN_SATISFACTION+" desc");
+			cursor.moveToFirst();
+			Integer energy = energyMax;
+			FoodData data;
+			while( !cursor.isAfterLast()){
+				data = getData( cursor);
+				if(data.getEnergy() < energy && (!mustImage || data.getImage()!=null)){
+					energy -= data.getEnergy();
+					dataList.add(data);
+				}
+				cursor.moveToNext();
+			}
+		}catch(Exception ex){
+			Log.d(ex.toString(), ex.getMessage());
+		} finally {
+		}				
+		return dataList;
 	}
 }
 

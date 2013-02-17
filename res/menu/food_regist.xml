@@ -10,4 +10,9 @@
         android:id="@+id/menu_delete"
         android:title="@string/menu_delete"
         android:icon="@android:drawable/ic_menu_delete" />
+    <!-- 複製メニュー -->
+    <item
+        android:id="@+id/menu_copy"
+        android:title="@string/menu_copy"
+        android:icon="@android:drawable/ic_menu_add" />
 </menu>
