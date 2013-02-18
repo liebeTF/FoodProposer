@@ -75,7 +75,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 			createSql.append(FoodData.COLUMN_UNIT + " text default '"+FoodData.units.get(0)+"',");
 			createSql.append(FoodData.COLUMN_KIND + " text dafault '‚»‚Ì‘¼',");
 			createSql.append(FoodData.COLUMN_SATISFACTION + " integer default 50,");
-			createSql.append(FoodData.COLUMN_ATE_DATE + " integer not null,");
+			createSql.append(FoodData.COLUMN_DATE + " integer not null,");
 			createSql.append(FoodData.COLUMN_IMAGE + " blob,");
 			createSql.append(MealRecord.COLUMN_PROTEIN + " real not null,");
 			createSql.append(MealRecord.COLUMN_CARBOHYDRATE + " real not null,");

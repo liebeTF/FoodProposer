@@ -37,7 +37,7 @@ public class FoodDataDao {
 			values.put( FoodData.COLUMN_UNIT, data.getUnit());
 			values.put( FoodData.COLUMN_KIND, data.getKind());
 			values.put( FoodData.COLUMN_IMAGE, data.getImage());
-			values.put( FoodData.COLUMN_ATE_DATE, data.getDate());
+			values.put( FoodData.COLUMN_DATE, data.getDate());
 			values.put( FoodData.COLUMN_SATISFACTION, data.getSatisfaction());
 			values.put( MealRecord.COLUMN_PROTEIN, data.getProtein());
 			values.put( MealRecord.COLUMN_CARBOHYDRATE, data.getCarbohydrate());
@@ -142,7 +142,7 @@ public class FoodDataDao {
 		data.setName(cursor.getString(cursor.getColumnIndex(FoodData.COLUMN_NAME)));
 		data.setUnit(cursor.getString(cursor.getColumnIndex(FoodData.COLUMN_UNIT)));
 		data.setKind(cursor.getString(cursor.getColumnIndex(FoodData.COLUMN_KIND)));
-		data.setDate(cursor.getInt(cursor.getColumnIndex(FoodData.COLUMN_ATE_DATE)));
+		data.setDate(cursor.getInt(cursor.getColumnIndex(FoodData.COLUMN_DATE)));
 		data.setSatisfaction(cursor.getInt(cursor.getColumnIndex(FoodData.COLUMN_SATISFACTION)));
 
 		if(!cursor.isNull((cursor.getColumnIndex(FoodData.COLUMN_IMAGE))))
@@ -159,7 +159,7 @@ public class FoodDataDao {
 		
 		List<FoodData> dataList	 = new ArrayList<FoodData>();
 		try {
-			String selection = FoodData.COLUMN_ATE_DATE +" < "+ date;
+			String selection = FoodData.COLUMN_DATE +" < "+ date;
 			Cursor cursor = db.query( FoodData.TABLE_NAME, null, selection, null, null, null, FoodData.COLUMN_SATISFACTION+" desc");
 			cursor.moveToFirst();
 			Integer energy = energyMax;

@@ -15,20 +15,27 @@ import android.graphics.BitmapFactory;
 
 @SuppressWarnings("serial")
 public class FoodData implements Serializable {
+	public static final String Gram = "100g";
+	public static final String ML = "200ml";
+	public static final String Object = "1個";
+	public static final String Meal = "1食";
+	public static final String Slice = "1枚";
+
+	
+	public static final String Staple = "主食";
+	public static final String MainDish = "主菜";
+	public static final String SideDish = "副菜";
+	public static final String Drink = "飲み物";
+	public static final String Fruit = "果物";
+	public static final String EatOut = "外食";
+	public static final String Snack = "間食";	
+	public static final String Others = "その他";
 	
 	public static final List<String> units = Arrays.asList("100g","200ml","1個","1食","1枚");
 	public static final List<String> kinds = Arrays.asList(
-			"主食","主菜","副菜","飲み物","果物",
-			"外食","間食","その他"
+			Staple,MainDish,SideDish,Drink,Fruit,
+			EatOut,Snack,Others
 			);
-	public static final Integer Staple = 0;//主食
-	public static final Integer MainDish = 1;//主菜
-	public static final Integer SideDish = 2;//副菜
-	public static final Integer Drink = 3;//飲みもの
-	public static final Integer Fruit = 4;//果物
-	public static final Integer EatOut = 5;//外食
-	public static final Integer Snack = 6;//間食	
-	public static final Integer Others =7;//その他
 //	public static final Map<String, Integer> kinds = Collections
 //			.unmodifiableMap(new HashMap<String, Integer>() {
 //				{
@@ -58,26 +65,27 @@ public class FoodData implements Serializable {
 	public static final String COLUMN_UNIT = "unit";	
 	public static final String COLUMN_KIND = "kind";
 	public static final String COLUMN_SATISFACTION = "satisfaction";
-	public static final String COLUMN_ATE_DATE = "ate_date";	
+	public static final String COLUMN_DATE = "ate_date";	
 	public static final String COLUMN_IMAGE = "image";
 	
 	
 
 	
 	// プロパティ
-	private Long rowid = null;
-	private String name = null;
-	private String unit = null;
-	private String kind = null;
+	protected Long rowid = null;
+	protected String name = null;
+	protected String unit = null;
+	protected String kind = null;
 	
-	private Integer satisfaction = null;
-	private Integer date = null;
+	protected Integer satisfaction = null;
+	protected Integer date = null;
 	
-	private Double protein = null;
-	private Double carbohydrate = null;
-	private Double lipid = null;
+	protected Double protein = null;
+	protected Double carbohydrate = null;
+	protected Double lipid = null;
+	private boolean imageSet=false;
 
-	private byte[] image = null;
+	protected byte[] image = null;
 	
 
 	public Long getRowid() {
@@ -124,12 +132,15 @@ public class FoodData implements Serializable {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		Integer pfc[] = calcPFCpropotion();
-		builder.append(kind);
-		builder.append(": ");
-		builder.append(name);
-		builder.append(", ");
-		builder.append(pfc[0] + ":" + pfc[1] + ":" + pfc[2]);
+		builder.append(kind + ":");
+		builder.append(name + ",");
+		builder.append(unit + "当たり "+ getEnergy() + " kcal");
+//		Integer pfc[] = calcPFCpropotion();
+//		builder.append(kind);
+//		builder.append(": ");
+//		builder.append(name);
+//		builder.append(", ");
+//		builder.append(pfc[0] + ":" + pfc[1] + ":" + pfc[2]);
 		return builder.toString();
 	}
 	public Integer[] calcPFCpropotion(){
@@ -153,6 +164,22 @@ public class FoodData implements Serializable {
 		}else{
 			return false;
 		}
+	}
+	public String getUnitPart(boolean numberPart) {
+		char[] chars = unit.toCharArray();
+		int length = chars.length;
+		while(!Character.isDigit(chars[--length]));
+		if(numberPart)
+			return unit.substring(0,++length);
+		else
+			return unit.substring(++length);
+	}
+	public String[] getUnitParts() {
+		char[] chars = unit.toCharArray();
+		int length = chars.length;
+		while(!Character.isDigit(chars[--length]));
+		
+		return new String[]{unit.substring(0,++length),unit.substring(++length)};
 	}
 	public String getUnit() {
 		return unit;
@@ -184,8 +211,11 @@ public class FoodData implements Serializable {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		image.compress(CompressFormat.JPEG, 100, bos);
 		this.image = bos.toByteArray();
+		imageSet = true;
 	}
 	public void setImage(byte[] image) {
+		if(image !=null)
+			imageSet = true;
 		this.image = image;
 	}
 	public byte[] getImage() {
@@ -197,7 +227,7 @@ public class FoodData implements Serializable {
 	public Integer getMonth(){
 		return (date/100)%100;
 	}
-	public Integer getday(){
+	public Integer getDay(){
 		return date%100;
 	}
 	public Integer getDate() {

@@ -3,6 +3,7 @@ package com.example.foodlog.db;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -123,8 +124,8 @@ public class MealRecord implements Serializable {
 		StringBuilder builder = new StringBuilder();
 //		builder.append( getDate());
 //		builder.append(", ");
-		builder.append( getTime());
-		builder.append("," +  getNth()+"êHñ⁄");
+		builder.append(getNth()+"êHñ⁄");
+		builder.append("," +   getTime());
 		
 		if( energy != null){
 			builder.append(", ");
@@ -228,6 +229,12 @@ public class MealRecord implements Serializable {
 	public boolean removeFood(String food){
 		return foods.remove(food);
 	}
+	public boolean addFood(String food,String quantity){
+		return foods.add(food+" " +quantity);
+	}
+	public boolean removeFood(String food,String quantity){
+		return foods.remove(food+" "+quantity);
+	}
 	public boolean addFood(String food, Double protein, Double carbohydrate, Double lipid){
 		this.protein += protein;
 		this.carbohydrate += carbohydrate;
@@ -240,4 +247,23 @@ public class MealRecord implements Serializable {
 		this.lipid -= lipid;
 		return foods.remove(food);
 	}
+	
+	
+	public class Food extends FoodData{
+		private Double scale;
+
+		public Double getScale() {
+			return scale;
+		}
+		public Double getQuantity() {
+			String[] parts = getUnitParts();
+			Double num = Double.valueOf(parts[0]);
+			return num * scale;
+		}
+
+		public void setScale(double scale) {
+			this.scale = scale;
+		}
+	}
+
 }

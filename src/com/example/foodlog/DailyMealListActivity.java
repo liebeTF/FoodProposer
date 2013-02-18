@@ -1,8 +1,10 @@
 package com.example.foodlog;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import com.example.foodlog.db.DatabaseOpenHelper;
 import com.example.foodlog.db.MealRecord;
 import com.example.foodlog.db.MealRecordDao;
 import com.example.foodlog.db.StatisticsRecord;
@@ -36,6 +38,7 @@ public class DailyMealListActivity extends Activity implements OnItemClickListen
 	Integer year;
 	Integer month;
 	Integer day;
+	private List<String> recorded = new ArrayList();;
 	
 	private TextView dateText;
 	private TextView proteinText;
@@ -43,6 +46,7 @@ public class DailyMealListActivity extends Activity implements OnItemClickListen
 	private TextView lipidText;
 	private TextView energyText;
 	private Integer energyMax;
+	private final Integer ENERGY_MAX = 2000;
 	
 	
     // 一覧表示用ListView
@@ -54,7 +58,6 @@ public class DailyMealListActivity extends Activity implements OnItemClickListen
         super.onCreate(savedInstanceState);
         // 自動生成されたR.javaの定数を指定してXMLからレイアウトを生成
         setContentView(R.layout.daily_meal_list);
-        energyMax = 2000;
         
 		// インテントからオブジェクトを取得
 		Intent intent = getIntent();
@@ -141,29 +144,18 @@ public class DailyMealListActivity extends Activity implements OnItemClickListen
 
 			// 表示データのクリア
 			arrayAdapter.clear();
-			// Double proteinSum=0.0;
-			// Double carbohydrateSum=0.0;
-			// Double lipidSum=0.0;
+			recorded.clear();
 
 			// 表示データの設定
 			statistics = dao
 					.listToStatistics(result, StatisticsRecord.MODE_SUM);
 			for (MealRecord record : result) {
-				// proteinSum += (record.getProtein()==null)?
-				// 0:record.getProtein();
-				// carbohydrateSum += (record.getCarbohydrate()==null)?
-				// 0:record.getCarbohydrate();
-				// lipidSum += (record.getLipid()==null) ? 0: record.getLipid();
+				recorded.add(record.getNth().toString());
 				arrayAdapter.add(record);
 			}
-			// energyText.setText(MealRecord.calcEnergy(proteinSum,
-			// carbohydrateSum, lipidSum)+" kcal ");
-			// proteinText.setText("P " +proteinSum+" g");
-			// carbohydrateText.setText("C " +carbohydrateSum+" g");
-			// lipidText.setText("F " +lipidSum+" g");
 			if (statistics != null) {
 				energyText.setText(statistics.getEnergy() + " kcal ");
-				energyMax -= (statistics.getEnergy() != null)? statistics.getEnergy() : 0;
+				energyMax = ENERGY_MAX -( (statistics.getEnergy() != null)? statistics.getEnergy() : 0);
 				proteinText.setText("P " + statistics.getProtein() + " g");
 				carbohydrateText.setText("C " + statistics.getCarbohydrate()
 						+ " g");
@@ -217,7 +209,9 @@ public class DailyMealListActivity extends Activity implements OnItemClickListen
 							record.setHour(hourOfDay);
 							record.setMinute(minute);
 							// オブジェクトをインテントに詰める
+							String nth = DatabaseOpenHelper.join(recorded, ",")+"食目　記録済み";
 							recordIntent.putExtra(MealRecord.TABLE_NAME, record);
+							recordIntent.putExtra(MealRecord.COLUMN_NTH, nth);
 							startActivity(recordIntent);
 						}
 					}, MainActivity.calendar.get(Calendar.HOUR_OF_DAY), MainActivity.calendar.get(Calendar.MINUTE), true).show();

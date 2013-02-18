@@ -1,6 +1,9 @@
 package com.example.foodlog;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.zip.Inflater;
 
 import com.example.foodlog.db.MealRecord;
@@ -37,7 +40,8 @@ import android.widget.Toast;
 public class RecordActivity extends Activity {
 	// 対象のDailyRecordオブジェクト
 	private MealRecord record = null;
-	MealRecordDao dao = new MealRecordDao( this);	
+	MealRecordDao dao = new MealRecordDao( this);
+	String recordNth = null;
     
     // UI部品
     private TextView dateText = null;
@@ -52,6 +56,7 @@ public class RecordActivity extends Activity {
     private EditText lipidText = null;
     private TextView energyText = null;
     private Button calCalButton = null;
+    private TextView nthRecordedText = null;
 
     
     
@@ -63,6 +68,7 @@ public class RecordActivity extends Activity {
 		// インテントからオブジェクトを取得
 		Intent intent = getIntent();
 		record = (MealRecord)intent.getSerializableExtra( MealRecord.TABLE_NAME);
+		recordNth = (String)intent.getSerializableExtra( MealRecord.COLUMN_NTH);
 		if(record==null){
 			record = new MealRecord();
 		}
@@ -121,7 +127,9 @@ public class RecordActivity extends Activity {
 		satiety1Text.setOnClickListener(new SatietyOnClickListner());
 		satiety2Text = (TextView)findViewById( R.id.satiety2Text);
 		satiety2Text.setOnClickListener(new SatietyOnClickListner());
-
+		
+		nthRecordedText = (TextView)findViewById(R.id.nthRecordedText);
+		nthRecordedText.setText(recordNth);
 		nthText = (EditText)findViewById( R.id.nthText);
 		mealTimeText = (EditText)findViewById( R.id.mealTimeText);
 		memberText = (EditText)findViewById( R.id.memberText);
@@ -280,8 +288,9 @@ public class RecordActivity extends Activity {
 					Toast toast = Toast.makeText(RecordActivity.this, R.string.deleted, Toast.LENGTH_SHORT);
 					toast.show();
 					
-					Intent listIntent = new Intent(RecordActivity.this,ListActivity.class);
-					startActivity(listIntent);
+//					Intent listIntent = new Intent(RecordActivity.this,ListActivity.class);
+//					startActivity(listIntent);
+					finish();
 				}
 			});
 			// キャンセルボタン設定
@@ -477,9 +486,10 @@ public class RecordActivity extends Activity {
 			}
 			adb.setView(actionAlertView);
 			adb.show();
-		}
-		
+		}		
 	}
+
+	
 }
 
 
